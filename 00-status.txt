@@ -1,0 +1,3 @@
+sha=06e0366269c06ed2b6e759bbcef416d17cef99d8
+apk=failure
+run=https://github.com/westfrost/mobileraker/actions/runs/37731058186

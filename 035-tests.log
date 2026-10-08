@@ -1,0 +1,9 @@
+package:flutter_typeahead has `uses-material-design: true` set but the primary pubspec contains `uses-material-design: false`. If the application needs material icons, then `uses-material-design`  must be set to true.
+package:pull_to_refresh_flutter3 has `uses-material-design: true` set but the primary pubspec contains `uses-material-design: false`. If the application needs material icons, then `uses-material-design`  must be set to true.
+
+✅ detects layers, extrusions, travels and retractions
+✅ absolute extrusion and G92 reset
+✅ arcs are segmented
+✅ live render data follows the file position
+
+🎉 4 tests passed.
