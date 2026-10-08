@@ -70,15 +70,14 @@ class CustomerInfoNotifier extends _$CustomerInfoNotifier {
 
 @Riverpod(keepAlive: true)
 bool isSupporter(Ref ref) {
-  if (kDebugMode) return true;
-  return ref.watch(isSupporterAsyncProvider).value == true;
+  // Personal build: every supporter feature is unlocked.
+  return true;
 }
 
 @Riverpod(keepAlive: true)
 FutureOr<bool> isSupporterAsync(Ref ref) async {
-  if (kDebugMode) return true;
-  var customerInfo = await ref.watch(customerInfoProvider.future);
-  return customerInfo.entitlements.active.containsKey('Supporter') == true;
+  // Personal build: every supporter feature is unlocked.
+  return true;
 }
 
 /// Returns the platform, if any, where the user bought the supporter package
@@ -130,6 +129,10 @@ class PaymentService {
   final Ref _ref;
 
   Future<void> initialize() async {
+    // Personal build: no in-app purchases, RevenueCat is never contacted.
+    talker.info('PaymentService disabled in personal build');
+    return;
+    // ignore: dead_code
     if (kDebugMode) await Purchases.setLogLevel(LogLevel.info);
 
     PurchasesConfiguration configuration;

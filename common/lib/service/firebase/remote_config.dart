@@ -23,6 +23,9 @@ FirebaseRemoteConfig remoteConfigInstance(Ref ref) {
 
 @Riverpod(keepAlive: true)
 Stream<RemoteConfigUpdate> _remoteConfigUpdateStream(Ref ref) async* {
+  // Personal build: no Firebase project, so there are never remote updates.
+  return;
+  // ignore: dead_code
   final instance = ref.watch(remoteConfigInstanceProvider);
   await for (final update in instance.onConfigUpdated) {
     talker.info('[Remote-Config] Received update for keys: ${update.updatedKeys.join(', ')}');
@@ -178,10 +181,7 @@ extension MobilerakerFF on FirebaseRemoteConfig {
         'eula_url_ios': 'https://mobileraker.com/eula-v2.html',
         'eula_url_android': 'https://mobileraker.com/eula-v2.html',
       });
-      fetchAndActivate().then((value) {
-        talker.info(
-            'FirebaseRemote values are fetched and activated! The last fetch was ${value ? 'successful' : 'not successful'} and on $lastFetchTime');
-      }).ignore();
+      // Personal build: no Firebase project, only the local defaults above are used.
       talker.info('Completed FirebaseRemote init');
     } catch (e, s) {
       talker.warning('Error while trying to setup Firebase Remote Config', e);

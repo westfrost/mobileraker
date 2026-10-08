@@ -21,6 +21,9 @@ FirebaseAuth auth(Ref ref) {
 class FirebaseUser extends _$FirebaseUser {
   @override
   Stream<User?> build() {
+    // Personal build: no Firebase project, so there is never a signed in user.
+    return Stream.value(null);
+    // ignore: dead_code
     var firebaseAuth = ref.watch(authProvider);
     listenSelf((AsyncValue<User?>? previous, next) {
       talker.info('Firebase Auth User changed from $previous to $next');

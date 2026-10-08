@@ -35,6 +35,7 @@ import 'package:common/util/extensions/logging_extension.dart';
 import 'package:common/util/extensions/object_extension.dart';
 import 'package:common/util/logger.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_app_check/firebase_app_check.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
@@ -335,14 +336,13 @@ class Warmup extends _$Warmup {
       }
     });
 
+    // Personal build: there is no Firebase project, so App Check, crash reporting and analytics stay off.
     yield StartUpStep.firebaseAppCheck;
-    await FirebaseAppCheck.instance.activate();
 
     yield StartUpStep.firebaseRemoteConfig;
     await ref.read(remoteConfigInstanceProvider).initialize();
-    if (kDebugMode) {
-      FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(false);
-    }
+    await FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(false).catchError((_) {});
+    await FirebaseAnalytics.instance.setAnalyticsCollectionEnabled(false).catchError((_) {});
 
     FlutterError.onError = (FlutterErrorDetails details) {
       if (_isTransientJRpcTimeout(details.exception)) {
@@ -363,16 +363,11 @@ class Warmup extends _$Warmup {
       return true;
     };
     yield StartUpStep.firebaseAnalytics;
-    ref.read(analyticsProvider).logAppOpen().ignore();
 
     yield StartUpStep.firebaseAuthUi;
-    // Just make sure it is created!
-    ref.read(firebaseUserProvider);
 
+    // Personal build: no ads, AdMob is never initialized.
     yield StartUpStep.admobs;
-    ref.read(adMobsProvider).initialize().whenComplete(() {
-      talker.info('Completed AdMobs init');
-    });
 
     setupLicenseRegistry();
 
