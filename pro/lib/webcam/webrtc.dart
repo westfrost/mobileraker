@@ -14,6 +14,9 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import 'package:webview_flutter_android/webview_flutter_android.dart';
 
+/// Same signature as the app's webcam image builder.
+typedef ImageBuilder = Widget Function(BuildContext context, Widget image);
+
 class WebRtc extends HookWidget {
   const WebRtc({
     super.key,
@@ -33,7 +36,7 @@ class WebRtc extends HookWidget {
   final List<Widget> stackContent;
   final int rotation;
   final Matrix4? transform;
-  final Widget Function(BuildContext context, Widget image)? imageBuilder;
+  final ImageBuilder? imageBuilder;
   final VoidCallback? onHidePressed;
 
   /// Maps the configured stream/signaling URL to the HTML player page of the server.
@@ -85,7 +88,8 @@ class WebRtc extends HookWidget {
     final uri = playerUri(camUri, service);
 
     final controller = useMemoized(() {
-      final c = WebViewController()
+      final c = WebViewController();
+      c
         ..setJavaScriptMode(JavaScriptMode.unrestricted)
         ..setBackgroundColor(Colors.black)
         ..setNavigationDelegate(NavigationDelegate(

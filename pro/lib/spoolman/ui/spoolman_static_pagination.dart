@@ -38,7 +38,7 @@ class SpoolmanStaticPagination extends HookConsumerWidget {
     final count = useState(initialCount);
     // Fetch one more so excluding an entry still fills the page.
     final fetchCount = count.value + (exclude == null ? 0 : 1);
-    final async = ref.watch(spoolmanListProviderFor(machineUUID, type, fetchCount, filters));
+    final async = watchSpoolmanList(ref, machineUUID, type, fetchCount, filters);
     final data = async.value;
     final themeData = Theme.of(context);
 

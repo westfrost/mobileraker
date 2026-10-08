@@ -92,6 +92,8 @@ class PrinterGroup {
   final DateTime created;
   final DateTime lastModified;
 
+  bool get hasPresets => presets.isNotEmpty;
+
   PrinterGroup copyWith({
     String? name,
     List<String>? machineUUIDs,

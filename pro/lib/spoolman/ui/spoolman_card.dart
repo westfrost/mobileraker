@@ -92,7 +92,8 @@ class _SpoolmanCardBody extends StatelessWidget {
       );
     } else {
       final fil = s.filament;
-      final remaining = s.remainingWeight ?? s.effectiveInitialWeight?.let((it) => it - s.usedWeight);
+      final initial = s.effectiveInitialWeight;
+      final remaining = s.remainingWeight ?? (initial == null ? null : initial - s.usedWeight);
       content = InkWell(
         onTap: () => onOpen(s),
         child: Padding(
@@ -205,8 +206,4 @@ class _SpoolmanCardPreview extends StatelessWidget {
     );
     return _SpoolmanCardBody(spool: spool, onSelect: () {}, onOpen: (_) {});
   }
-}
-
-extension<T> on T {
-  R let<R>(R Function(T it) f) => f(this);
 }

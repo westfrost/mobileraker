@@ -9,6 +9,7 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:collection/collection.dart';
+import 'package:common/data/dto/jrpc/rpc_response.dart';
 import 'package:common/data/dto/pagination_result.dart';
 import 'package:common/exceptions/mobileraker_exception.dart';
 import 'package:common/network/jrpc_client_provider.dart';

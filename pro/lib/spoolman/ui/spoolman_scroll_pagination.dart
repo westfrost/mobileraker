@@ -18,16 +18,19 @@ enum SpoolmanListType { spools, filaments, vendors }
 
 const _kPageSize = 25;
 
-ProviderListenable<AsyncValue<PaginationResult<SpoolmanIdentifiableDtoMixin>>> spoolmanListProviderFor(
+/// Watches the first [count] entries of the list of [type].
+AsyncValue<PaginationResult<SpoolmanIdentifiableDtoMixin>> watchSpoolmanList(
+  WidgetRef ref,
   String machineUUID,
   SpoolmanListType type,
   int count,
   SpoolmanFilter filters,
 ) {
   return switch (type) {
-    SpoolmanListType.spools => spoolListProvider(machineUUID, page: 0, pageSize: count, filters: filters),
-    SpoolmanListType.filaments => filamentListProvider(machineUUID, page: 0, pageSize: count, filters: filters),
-    SpoolmanListType.vendors => vendorListProvider(machineUUID, page: 0, pageSize: count, filters: filters),
+    SpoolmanListType.spools => ref.watch(spoolListProvider(machineUUID, page: 0, pageSize: count, filters: filters)),
+    SpoolmanListType.filaments =>
+      ref.watch(filamentListProvider(machineUUID, page: 0, pageSize: count, filters: filters)),
+    SpoolmanListType.vendors => ref.watch(vendorListProvider(machineUUID, page: 0, pageSize: count, filters: filters)),
   };
 }
 
@@ -64,7 +67,7 @@ class SpoolmanScrollPagination extends HookConsumerWidget {
       return null;
     }, [type, filters]);
 
-    final async = ref.watch(spoolmanListProviderFor(machineUUID, type, count.value, filters));
+    final async = watchSpoolmanList(ref, machineUUID, type, count.value, filters);
     final data = async.value;
 
     Future<void> onRefresh() async {
